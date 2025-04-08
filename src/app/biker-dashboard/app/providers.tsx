@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useEffect } from "react"
-import { setupRealTimeSimulation } from "@/lib/data-service"
+import { setupRealTimeSimulation } from "../lib/data-service"
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {

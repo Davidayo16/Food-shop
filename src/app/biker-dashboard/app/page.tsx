@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { ArrowRight, DollarSign, ShoppingBag, Truck, Star } from "lucide-react"
-import { Header } from "@/components/header"
+import { Header } from "../components/header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/components/ui/use-toast"
-import { useDashboardStore } from "@/lib/data-service"
+import { useDashboardStore } from "../lib/data-service"
 
 export default function Dashboard() {
   const { income, orders, deliveryRequests, activeDeliveries, recentReviews } = useDashboardStore()

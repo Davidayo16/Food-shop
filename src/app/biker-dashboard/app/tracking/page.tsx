@@ -1,14 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Header } from "@/components/header"
+import { Header } from "../../components/header";
 import { Card, CardContent } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { MapPin, Store } from "lucide-react"
-import { DeliverySuccessModal } from "@/components/delivery-success-modal"
+import { DeliverySuccessModal } from "../../components/delivery-success-modal"
 import Image from "next/image"
 import Map from "@/components/map"
 import { useRouter } from 'next/router';
