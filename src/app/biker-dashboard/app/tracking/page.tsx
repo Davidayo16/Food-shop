@@ -11,7 +11,7 @@ import { MapPin, Store } from "lucide-react";
 import { DeliverySuccessModal } from "../../components/delivery-success-modal";
 import Image from "next/image";
 import Map from "@/components/map";
-import { useSearchParams } from "next/navigation"; // Use this instead
+import { useSearchParams } from "next/navigation";
 
 // Simulated data
 const initialTrackings = [
@@ -30,11 +30,12 @@ export default function TrackingPage() {
   const [selectedTracking, setSelectedTracking] = useState<string | null>(null);
   const [statusUpdate, setStatusUpdate] = useState("Pickup");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const searchParams = useSearchParams(); // Get query params
-  const role = searchParams.get("role"); // Extract 'role' from query
+  const [isMounted, setIsMounted] = useState(false); // Track client-side mount
+  const searchParams = useSearchParams();
 
-  // Simulate selecting the first tracking by default
+  // Set isMounted to true only on the client
   useEffect(() => {
+    setIsMounted(true);
     setSelectedTracking(trackings[0].id);
   }, [trackings]);
 
@@ -44,13 +45,18 @@ export default function TrackingPage() {
     }
   };
 
+  // Avoid rendering until mounted (server prerendering workaround)
+  if (!isMounted) {
+    return <div>Loading...</div>; // Or null for an empty shell
+  }
+
+  const role = searchParams.get("role"); // Safe to call after mount
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header username="John" />
-
       <div className="p-6">
         <h2 className="text-xl font-bold mb-4">Tracking</h2>
-
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           <div className="md:col-span-6">
             <Card>
@@ -61,7 +67,6 @@ export default function TrackingPage() {
                     <div className="col-span-5">Tracking ID</div>
                     <div className="col-span-6">Status</div>
                   </div>
-
                   {trackings.map((tracking, index) => (
                     <div
                       key={index}
@@ -90,10 +95,8 @@ export default function TrackingPage() {
               </CardContent>
             </Card>
           </div>
-
           <div className="md:col-span-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Status Update and Order Details */}
               <div className="space-y-4">
                 <Card className="p-4">
                   <h3 className="font-medium mb-2">Status Update</h3>
@@ -102,7 +105,6 @@ export default function TrackingPage() {
                     Update
                   </Button>
                 </Card>
-
                 <Card className="p-4">
                   <div className="flex justify-between items-center mb-4">
                     <div>
@@ -120,7 +122,6 @@ export default function TrackingPage() {
                     </div>
                     <Badge className="bg-orange-100 text-orange-600 hover:bg-orange-100">Assigned</Badge>
                   </div>
-
                   <div className="space-y-4">
                     <div className="flex items-start gap-4">
                       <div className="flex flex-col items-center">
@@ -134,7 +135,6 @@ export default function TrackingPage() {
                         <p className="text-gray-500">Pick Up</p>
                       </div>
                     </div>
-
                     <div className="flex items-start gap-4">
                       <div className="flex flex-col items-center">
                         <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
@@ -149,8 +149,6 @@ export default function TrackingPage() {
                   </div>
                 </Card>
               </div>
-
-              {/* Map */}
               <div className="h-full">
                 <Card className="p-0 h-full overflow-hidden">
                   <div className="relative w-full h-full min-h-[400px]">
@@ -166,7 +164,6 @@ export default function TrackingPage() {
           </div>
         </div>
       </div>
-
       <DeliverySuccessModal open={showSuccessModal} onClose={() => setShowSuccessModal(false)} orderId="QF3348" />
     </div>
   );
