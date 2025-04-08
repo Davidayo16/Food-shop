@@ -53,7 +53,7 @@ export default function DriverSignup() {
       <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-xl">
         <h2 className="text-3xl font-semibold text-center mb-6">Create Driver Account</h2>
         <p className="text-center text-gray-600 mb-4">
-          Already have an account? <a href="/driver/login" className="text-orange-500">Login</a>
+          Already have an account? <a href="/biker-dashboard/login" className="text-orange-500">Login</a>
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <h3 className="text-[#1A1A1A]">Personal Information</h3>
