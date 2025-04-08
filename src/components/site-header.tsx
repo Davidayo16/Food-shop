@@ -1,13 +1,27 @@
+// components/site-header.tsx
+"use client";
+
 import Link from "next/link";
 import { ShoppingCart, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Logo from "../../public/logo.png";
+import { useUserStore } from "@/lib/user-store";
+import { LoginSimulator } from "@/components/LoginSimulator";
 
 export function SiteHeader() {
+  const { user } = useUserStore();
+  const accountLink =
+    user?.role === "customer"
+      ? "/dashboard/customer"
+      : user?.role === "biker"
+      ? "/biker-dashboard/app"
+      : user?.role === "vendor"
+      ? "/vendor/dashboard"
+      : "/onboard";
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white shadow-md">
-      {/* Top Bar */}
       <div className="bg-[#082814] w-full py-2 px-4 md:px-8 flex items-center justify-between text-sm">
         <span className="text-[#FFFFFF]">+443574545</span>
         <div className="hidden md:flex items-center gap-4">
@@ -23,25 +37,28 @@ export function SiteHeader() {
           </select>
         </div>
       </div>
-
-      {/* Main Header */}
       <div className="container-fluid bg-[#F0FFF0] mx-auto flex items-center justify-between px-4 md:px-8 py-4">
-        {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image src={Logo} alt="Logo" width={60} height={60} />
         </Link>
-
-        {/* Icons (Responsive) */}
-        <div className="flex items-center gap-6">
-          {/* User Icon */}
-          <Link href="/onboard">
-          <Button variant="ghost" size="icon" className="flex items-center gap-1">
-            <span className="hidden md:block text-xs text-gray-700">Account</span>
-            <User className="h-5 w-5 text-gray-700" />
-          </Button>
+        <div className="flex items-center gap-4">
+          <Link href={accountLink}>
+            <Button variant="ghost" size="icon" className="flex items-center gap-1">
+              {user ? (
+                <>
+                  <span className="hidden md:block text-xs text-gray-700">{user.name}</span>
+                  <div className="w-5 h-5 rounded-full bg-gray-300 flex items-center justify-center">
+                    <span className="text-xs text-gray-700">{user.name?.[0]}</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span className="hidden md:block text-xs text-gray-700">Account</span>
+                  <User className="h-5 w-5 text-gray-700" />
+                </>
+              )}
+            </Button>
           </Link>
-
-          {/* Cart Icon */}
           <Link href="/cart" className="relative flex items-center gap-1">
             <Button variant="ghost" size="icon">
               <span className="hidden md:block text-xs text-gray-700">Cart</span>
@@ -51,6 +68,7 @@ export function SiteHeader() {
               </span>
             </Button>
           </Link>
+          <LoginSimulator /> {/* Subtle icon with modal */}
         </div>
       </div>
     </header>

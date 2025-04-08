@@ -19,6 +19,8 @@ export default function OnboardPage() {
         return "/signup";
       case "vendor":
         return "/vendor/signup";
+      case "driver":
+        return "/biker-dashboard/signup";
       default:
         return "#";
     }
@@ -28,6 +30,8 @@ export default function OnboardPage() {
     { key: "order", label: "Order Now" },
     { key: "customer", label: "Customer" },
     { key: "vendor", label: "Vendor" },
+     { key: "driver", label: "Driver" },
+
   ];
 
   return (
