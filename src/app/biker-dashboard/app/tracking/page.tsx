@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import { Header } from "../../components/header";
-import { Card, CardContent } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { MapPin, Store } from "lucide-react"
-import { DeliverySuccessModal } from "../../components/delivery-success-modal"
-import Image from "next/image"
-import Map from "@/components/map"
-import { useRouter } from "next/navigation"; // Change this impor
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { MapPin, Store } from "lucide-react";
+import { DeliverySuccessModal } from "../../components/delivery-success-modal";
+import Image from "next/image";
+import Map from "@/components/map";
+import { useSearchParams } from "next/navigation"; // Use this instead
 
 // Simulated data
 const initialTrackings = [
@@ -23,26 +23,26 @@ const initialTrackings = [
   { id: "TNQF3324", date: "Oct 4, 2024", status: "Delivered" },
   { id: "TNQF3324", date: "Oct 4, 2024", status: "Delivered" },
   { id: "TNQF3324", date: "Oct 4, 2024", status: "Delivered" },
-]
+];
 
 export default function TrackingPage() {
-  const [trackings, setTrackings] = useState(initialTrackings)
-  const [selectedTracking, setSelectedTracking] = useState<string | null>(null)
-  const [statusUpdate, setStatusUpdate] = useState("Pickup")
-  const [showSuccessModal, setShowSuccessModal] = useState(false)
-    const router = useRouter();
-  const { role } = router.query;
+  const [trackings, setTrackings] = useState(initialTrackings);
+  const [selectedTracking, setSelectedTracking] = useState<string | null>(null);
+  const [statusUpdate, setStatusUpdate] = useState("Pickup");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const searchParams = useSearchParams(); // Get query params
+  const role = searchParams.get("role"); // Extract 'role' from query
 
   // Simulate selecting the first tracking by default
   useEffect(() => {
-    setSelectedTracking(trackings[0].id)
-  }, [trackings])
+    setSelectedTracking(trackings[0].id);
+  }, [trackings]);
 
   const handleUpdateStatus = () => {
     if (statusUpdate.toLowerCase() === "delivered") {
-      setShowSuccessModal(true)
+      setShowSuccessModal(true);
     }
-  }
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -150,12 +150,12 @@ export default function TrackingPage() {
                 </Card>
               </div>
 
-            {/* Map */}
+              {/* Map */}
               <div className="h-full">
                 <Card className="p-0 h-full overflow-hidden">
                   <div className="relative w-full h-full min-h-[400px]">
-                   <p>Role: {role || 'Not set'}</p>
-                  <Map role={role}/>
+                    <p>Role: {role || "Not set"}</p>
+                    <Map role={role} />
                     <div className="absolute top-2 left-2 bg-white p-2 rounded-md shadow-md">
                       <h3 className="text-sm font-medium">Live Tracking</h3>
                     </div>
@@ -169,6 +169,5 @@ export default function TrackingPage() {
 
       <DeliverySuccessModal open={showSuccessModal} onClose={() => setShowSuccessModal(false)} orderId="QF3348" />
     </div>
-  )
+  );
 }
-
