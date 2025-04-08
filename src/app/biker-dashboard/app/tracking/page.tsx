@@ -11,7 +11,7 @@ import { MapPin, Store } from "lucide-react"
 import { DeliverySuccessModal } from "../../components/delivery-success-modal"
 import Image from "next/image"
 import Map from "@/components/map"
-import { useRouter } from 'next/router';
+import { useRouter } from "next/navigation"; // Change this impor
 
 // Simulated data
 const initialTrackings = [
