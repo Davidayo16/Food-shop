@@ -41,7 +41,7 @@ export function SiteHeader() {
         <Link href="/" className="flex items-center">
           <Image src={Logo} alt="Logo" width={60} height={60} />
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6 md:gap-10">
           <Link href={accountLink}>
             <Button variant="ghost" size="icon" className="flex items-center gap-1">
               {user ? (
@@ -53,7 +53,7 @@ export function SiteHeader() {
                 </>
               ) : (
                 <>
-                  <span className="hidden md:block text-xs text-gray-700">Account</span>
+                  <span className="hidden md:block text-xs text-gray-700">Sign up</span>
                   <User className="h-5 w-5 text-gray-700" />
                 </>
               )}
