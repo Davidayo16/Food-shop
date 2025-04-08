@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Header } from "../../components/header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -25,17 +25,16 @@ const initialTrackings = [
   { id: "TNQF3324", date: "Oct 4, 2024", status: "Delivered" },
 ];
 
-export default function TrackingPage() {
+// Client-side content that uses useSearchParams
+function TrackingContent() {
   const [trackings, setTrackings] = useState(initialTrackings);
   const [selectedTracking, setSelectedTracking] = useState<string | null>(null);
   const [statusUpdate, setStatusUpdate] = useState("Pickup");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [isMounted, setIsMounted] = useState(false); // Track client-side mount
   const searchParams = useSearchParams();
+  const role = searchParams.get("role");
 
-  // Set isMounted to true only on the client
   useEffect(() => {
-    setIsMounted(true);
     setSelectedTracking(trackings[0].id);
   }, [trackings]);
 
@@ -45,16 +44,8 @@ export default function TrackingPage() {
     }
   };
 
-  // Avoid rendering until mounted (server prerendering workaround)
-  if (!isMounted) {
-    return <div>Loading...</div>; // Or null for an empty shell
-  }
-
-  const role = searchParams.get("role"); // Safe to call after mount
-
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header username="John" />
+    <>
       <div className="p-6">
         <h2 className="text-xl font-bold mb-4">Tracking</h2>
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -165,6 +156,17 @@ export default function TrackingPage() {
         </div>
       </div>
       <DeliverySuccessModal open={showSuccessModal} onClose={() => setShowSuccessModal(false)} orderId="QF3348" />
+    </>
+  );
+}
+
+export default function TrackingPage() {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header username="John" />
+      <Suspense fallback={<div>Loading tracking data...</div>}>
+        <TrackingContent />
+      </Suspense>
     </div>
   );
 }
