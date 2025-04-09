@@ -36,8 +36,9 @@ function SidebarWrapperContent({ children }: SidebarWrapperProps) {
     <div className="flex min-h-screen w-full">
       {/* Sidebar - fixed position on mobile, static on desktop */}
       <div
+    style={{ zIndex: 9999 }}
         id="mobile-sidebar"
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r transform transition-transform duration-300 md:relative md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 w-64 bg-white border-r transform transition-transform duration-300 md:relative md:translate-x-0 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
