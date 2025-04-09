@@ -45,7 +45,6 @@ content: [
           foreground: "hsl(var(--destructive-foreground))",
         },
         border: "hsl(var(--border))",
-        "border-border": "hsl(var(--border))", // Added this to define border-border
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         chart: {
