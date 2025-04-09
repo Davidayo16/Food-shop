@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import Image from "next/image";
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
@@ -82,13 +82,16 @@ export function Sidebar({ onClose }: SidebarProps) {
   return (
     <div className="flex flex-col h-full">
       <div className="p-3 sm:p-4 border-b flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-2">
+        {/* <Link href="/" className="flex items-center gap-2">
           <div className="relative w-8 h-8 sm:w-10 sm:h-10">
             <div className="absolute inset-0 bg-green-600 rounded-md flex items-center justify-center">
               <span className="text-white font-bold text-xs">QFS</span>
             </div>
           </div>
           <span className="font-bold text-green-600 text-base sm:text-lg hidden xs:inline">QUICKFOODSHOP</span>
+        </Link> */}
+          <Link href="/" className="flex items-center">
+          <Image src='/logo.png' alt="Logo" width={60} height={60} />
         </Link>
         
         {/* Close button - only visible on mobile */}
