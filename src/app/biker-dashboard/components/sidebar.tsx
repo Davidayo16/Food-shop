@@ -32,42 +32,42 @@ export function Sidebar({ onClose }: SidebarProps) {
   const routes = [
     {
       name: "Dashboard",
-      path: "/",
+      path: "/biker-dashboard/app",
       icon: LayoutGrid,
     },
     {
       name: "Requests",
-      path: "/requests",
+      path: "/biker-dashboard/app/requests",
       icon: ClipboardList,
     },
     {
       name: "Orders",
-      path: "/orders",
+      path: "/biker-dashboard/app/orders",
       icon: PackageCheck,
     },
     {
       name: "Transactions",
-      path: "/transactions",
+      path: "/biker-dashboard/app/transactions",
       icon: BarChart3,
     },
     {
       name: "Tracking",
-      path: "/tracking",
+      path: "/biker-dashboard/app/tracking",
       icon: MapPin,
     },
     {
       name: "Withdrawal",
-      path: "/withdrawal",
+      path: "/biker-dashboard/app/withdrawal",
       icon: Wallet,
     },
     {
       name: "Settings",
-      path: "/settings",
+      path: "/biker-dashboard/app/settings",
       icon: Settings,
     },
     {
       name: "Support",
-      path: "/support",
+      path: "/biker-dahboard/app/support",
       icon: HelpCircle,
     },
   ]

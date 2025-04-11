@@ -1,20 +1,22 @@
-"use client"
+// e.g., app/orders/page.tsx
+"use client";
 
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import { Header } from "../../components/header";
-import { Card, CardContent } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 // Simulated data
 const initialOrders = [
   { id: "QF3384", date: "14th Mar, 2024 - 12:03PM", status: "Delivered" },
   { id: "QF3384", date: "14th Mar, 2024 - 12:03PM", status: "Delivered" },
   { id: "QF3384", date: "14th Mar, 2024 - 12:03PM", status: "Delivered" },
-]
+];
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState(initialOrders)
+  const [orders, setOrders] = useState(initialOrders);
 
   // Simulate real-time updates
   useEffect(() => {
@@ -24,13 +26,13 @@ export default function OrdersPage() {
           id: `QF${Math.floor(1000 + Math.random() * 9000)}`,
           date: "14th Mar, 2024 - 12:03PM",
           status: "Delivered",
-        }
-        setOrders((prev) => [newOrder, ...prev.slice(0, 9)])
+        };
+        setOrders((prev) => [newOrder, ...prev.slice(0, 9)]);
       }
-    }, 10000)
+    }, 10000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -57,9 +59,7 @@ export default function OrdersPage() {
                   <div className="col-span-4 flex items-center gap-2">
                     <div className="bg-green-50 p-1 rounded-md">
                       <div className="relative w-6 h-6">
-                        <div className="absolute inset-0 bg-green-600 rounded-md flex items-center justify-center">
-                          <span className="text-white font-bold text-xs">QFS</span>
-                        </div>
+                        <Image src="/logo.png" alt="Logo" width={60} height={60} className="absolute inset-0 rounded-md" />
                       </div>
                     </div>
                     <span className="font-medium">{order.id}</span>
@@ -75,6 +75,5 @@ export default function OrdersPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
-

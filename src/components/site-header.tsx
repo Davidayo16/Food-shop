@@ -1,6 +1,7 @@
-// components/site-header.tsx
+// src/components/site-header.tsx
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { ShoppingCart, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,15 +11,23 @@ import { useUserStore } from "@/lib/user-store";
 import { LoginSimulator } from "@/components/LoginSimulator";
 
 export function SiteHeader() {
-  const { user } = useUserStore();
-  const accountLink =
-    user?.role === "customer"
-      ? "/dashboard/customer"
-      : user?.role === "biker"
-      ? "/biker-dashboard/app"
-      : user?.role === "vendor"
+  const { user, loadUser } = useUserStore();
+
+  useEffect(() => {
+    loadUser();
+  }, [loadUser]);
+
+  const accountLink = user?.role
+    ? user.role === "admin"
+      ? "/admin/dashboard"
+      : user.role === "vendor"
       ? "/vendor/dashboard"
-      : "/onboard";
+      : user.role === "customer"
+      ? "/dashboard/customer"
+      : user.role === "biker"
+      ? "/biker-dashboard/app"
+      : "/onboard"
+    : "/onboard";
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white shadow-md">
@@ -26,7 +35,9 @@ export function SiteHeader() {
         <span className="text-[#FFFFFF]">+443574545</span>
         <div className="hidden md:flex items-center gap-4">
           <span className="text-[#FFFFFF]">Get 20% off selected food items</span>
-          <Link href="/shop" className="text-[#FFC859]">Shop Now</Link>
+          <Link href="/shop" className="text-[#FFC859]">
+            Shop Now
+          </Link>
         </div>
         <div className="hidden md:flex items-center gap-4 text-[#FFFFFF]">
           <select className="bg-transparent focus:outline-none">
@@ -46,9 +57,9 @@ export function SiteHeader() {
             <Button variant="ghost" size="icon" className="flex items-center gap-1">
               {user ? (
                 <>
-                  <span className="hidden md:block text-xs text-gray-700">{user.name}</span>
-                  <div className="w-5 h-5 rounded-full bg-gray-300 flex items-center justify-center">
-                    <span className="text-xs text-gray-700">{user.name?.[0]}</span>
+                  {/* <span className="hidden md:block text-xs text-gray-700">{user.name}</span> */}
+                  <div className="w-5 h-5 rounded-full p-4 bg-gray-300 flex items-center justify-center">
+                    <span className="text-xs text-gray-700">{user.name?.[0].toUpperCase()}</span>
                   </div>
                 </>
               ) : (
@@ -68,7 +79,7 @@ export function SiteHeader() {
               </span>
             </Button>
           </Link>
-          <LoginSimulator /> {/* Subtle icon with modal */}
+          <LoginSimulator />
         </div>
       </div>
     </header>

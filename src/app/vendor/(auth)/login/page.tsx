@@ -1,3 +1,4 @@
+// src/pages/VendorLoginPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -6,10 +7,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import PendingVerificationAlert from "@/components/PendingVerificationAlert";
 import { SiteHeader } from "@/components/site-header";
+import { useUserStore } from "@/lib/user-store";
+import { jwtDecode } from "jwt-decode";
+
+interface CustomJwtPayload {
+  id?: string;
+  email?: string;
+  role?: string;
+  iat?: number;
+  exp?: number;
+}
 
 const VendorLoginPage = () => {
   const [formData, setFormData] = useState({
-    phoneNumber: "",
+    email: "", // Changed from phoneNumber
     password: "",
   });
 
@@ -22,72 +33,69 @@ const VendorLoginPage = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setShowPending(false); // Reset pending alert on new login attempt
-  
+    setShowPending(false);
+
     try {
-      console.log("🔄 Checking if vendor is pending...");
+      // Check pending vendors using email
       const pendingResponse = await fetch("https://app.quickfoodshop.co.uk/v1/dashboard/pending-vendors", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-  
+
       const pendingData = await pendingResponse.json();
-      console.log("📄 Pending Vendors List:", JSON.stringify(pendingData, null, 2));
-  
+
       if (pendingResponse.ok && pendingData?.data) {
-        const isPending = pendingData.data.some((vendor: any) => vendor.phoneNumber === formData.phoneNumber);
+        const isPending = pendingData.data.some((vendor: any) => vendor.email === formData.email); // Changed to email
         if (isPending) {
-          console.log("❌ Vendor is pending. Showing Pending Alert.");
           setShowPending(true);
           setLoading(false);
-          return; // Stop login process here
+          return;
         }
       }
-  
-      console.log("🟢 Vendor is not pending. Proceeding with login...");
+
+      // Login request using email
       const response = await fetch("https://app.quickfoodshop.co.uk/v1/vendor/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), // Now sends { email, password }
       });
-  
+
       const data = await response.json();
-      console.log("🟡 Login Response Data:", JSON.stringify(data, null, 2));
-  
+
       if (!response.ok) {
         if (data.message?.toLowerCase().includes("pending")) {
-          console.log("⚠️ Backend confirmed vendor is pending.");
           setShowPending(true);
         } else {
-          console.log("❌ Login failed:", data.message);
           setError(data.message || "Login failed. Please try again.");
         }
         return;
       }
-  
+
       if (data.success && data.token) {
-        console.log("✅ Login successful. Storing token and redirecting...");
         localStorage.setItem("authToken", data.token);
+        const decoded: CustomJwtPayload = jwtDecode(data.token);
+        useUserStore.getState().setUser({
+          name: decoded.email ? decoded.email.split("@")[0] : "Vendor", // Extract name from email
+          role: decoded.role ? decoded.role.toLowerCase() : "vendor",
+        });
         router.push("/vendor/dashboard");
       } else {
-        console.error("🚨 No token received!");
         setError("Authentication failed. Please try again.");
       }
     } catch (error) {
-      console.error("🚨 Error during login:", error);
+      console.error("Vendor: Login error:", error);
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <div>
       <SiteHeader />
       <div className="min-h-screen w-full bg-white flex justify-center items-center">
         {showPending ? (
-          <PendingVerificationAlert /> // Show pending verification alert after clicking login
+          <PendingVerificationAlert />
         ) : (
           <div className="mx-auto max-w-xl px-4 py-8 bg-white shadow-lg rounded-lg">
             <h1 className="mb-2 text-center text-4xl font-semibold">Vendor Login</h1>
@@ -95,10 +103,10 @@ const VendorLoginPage = () => {
             {error && <p className="text-red-500 text-center">{error}</p>}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <InputField label="Phone Number" name="phoneNumber" value={formData.phoneNumber} onChange={setFormData} />
+              <InputField label="Email" name="email" value={formData.email} onChange={setFormData} /> {/* Changed to Email */}
               <InputField label="Password" name="password" value={formData.password} onChange={setFormData} type="password" />
               <Button type="submit" className="w-full bg-[#006634] text-white hover:bg-[#006634]/90" disabled={loading}>
-                {loading ? "Loging in..." : "LOGIN"}
+                {loading ? "Logging in..." : "LOGIN"}
               </Button>
             </form>
           </div>

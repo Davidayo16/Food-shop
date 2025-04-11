@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { useDashboardStore } from "../lib/data-service";
+import Image from "next/image";
 
 export default function Dashboard() {
   const { income, orders, deliveryRequests, activeDeliveries, recentReviews } = useDashboardStore();
@@ -39,9 +40,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-2">
               <div className="bg-green-50 p-1 rounded-md">
                 <div className="relative w-5 h-5">
-                  <div className="absolute inset-0 bg-green-600 rounded-md flex items-center justify-center">
-                    <span className="text-white font-bold text-xs">QFS</span>
-                  </div>
+                  <Image src="/logo.png" alt="Logo" width={60} height={60} className="absolute inset-0 rounded-md" />
                 </div>
               </div>
               <div className="flex-1">
@@ -153,9 +152,7 @@ export default function Dashboard() {
                       <div className="sm:col-span-5 sm:col-span-4 flex items-center gap-2">
                         <div className="bg-green-50 p-1 rounded-md">
                           <div className="relative w-4 h-4 sm:w-5 sm:h-5">
-                            <div className="absolute inset-0 bg-green-600 rounded-md flex items-center justify-center">
-                              <span className="text-white font-bold text-xs">QFS</span>
-                            </div>
+                            <Image src="/logo.png" alt="Logo" width={60} height={60} className="absolute inset-0 rounded-md" />
                           </div>
                         </div>
                         <span className="font-medium text-xs sm:text-sm">
@@ -201,9 +198,7 @@ export default function Dashboard() {
                     <div className="flex items-center gap-2 mb-1">
                       <div className="bg-green-50 p-1 rounded-md">
                         <div className="relative w-4 h-4 sm:w-5 sm:h-5">
-                          <div className="absolute inset-0 bg-green-600 rounded-md flex items-center justify-center">
-                            <span className="text-white font-bold text-xs">QFS</span>
-                          </div>
+                          <Image src="/logo.png" alt="Logo" width={60} height={60} className="absolute inset-0 rounded-md" />
                         </div>
                       </div>
                       <span className="font-medium text-xs sm:text-sm">Order {review.id}</span>

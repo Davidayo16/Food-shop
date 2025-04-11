@@ -1,13 +1,39 @@
+// src/lib/user-store.ts
 import { create } from "zustand";
+import { jwtDecode } from "jwt-decode";
 
-interface UserState {
-  user: { role: "customer" | "biker" | "vendor" | null; name: string | null } | null;
-  login: (role: "customer" | "biker" | "vendor", name: string) => void;
-  logout: () => void;
+interface CustomJwtPayload {
+  id?: string;
+  email?: string;
+  role?: string;
+  iat?: number;
+  exp?: number;
 }
 
-export const useUserStore = create<UserState>((set) => ({
-  user: null, // Initially not logged in
-  login: (role, name) => set({ user: { role, name } }),
-  logout: () => set({ user: null }),
+export const useUserStore = create((set) => ({
+  user: null,
+  setUser: (user: { name: string; role: string | null } | null) => set({ user }),
+  loadUser: () => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      try {
+        const decoded: CustomJwtPayload = jwtDecode(token);
+        const user = {
+          name: decoded.email ? decoded.email.split("@")[0] : "User", // e.g., "james"
+          role: decoded.role ? decoded.role.toLowerCase() : null, // e.g., "admin", "vendor"
+        };
+        set({ user });
+      } catch (error) {
+        console.error("loadUser: Invalid token =", error);
+        localStorage.removeItem("authToken");
+        set({ user: null });
+      }
+    } else {
+      set({ user: null });
+    }
+  },
+  clearUser: () => {
+    localStorage.removeItem("authToken");
+    set({ user: null });
+  },
 }));

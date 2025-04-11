@@ -1,23 +1,43 @@
+// e.g., app/restaurant/page.tsx
 "use client";
+
 import { useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import FoodItemCard from "@/components/FoodItemCard";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Search, SlidersHorizontal, ChevronDown } from "lucide-react";
+import Image from "next/image";
 
 const foodItems = [
-  { id: "1", name: "Fried Rice & Chicken", image: "/basket1.png", price: 2500, delieveryTime: 45, outOfStock: false },
-  { id: "2", name: "Fried Rice & Chicken", image: "/basket1.png", price: 2500, delieveryTime: 27, outOfStock: true },
-  { id: "3", name: "Fried Rice & Chicken", image: "/basket1.png", price: 2500, delieveryTime: 9, outOfStock: false },
-  { id: "4", name: "Fried Rice & Chicken", image: "/basket1.png", price: 2500, delieveryTime: 24, outOfStock: false },
+  { id: "1", name: "Fried Rice & Chicken", category: "Food", image: "/food.png", price: 1500, deliveryTime: 45, outOfStock: false },
+  { id: "2", name: "Grilled Salmon", category: "Food", image: "/basket1.png", price: 3000, deliveryTime: 27, outOfStock: true },
+  { id: "3", name: "Fresh Apple Pack", category: "Fresh Items", image: "/basket1.png", price: 2000, deliveryTime: 9, outOfStock: false },
+  { id: "4", name: "Organic Salad", category: "Fresh Items", image: "/food.png", price: 2500, deliveryTime: 24, outOfStock: false },
+  { id: "5", name: "Pizza Margherita", category: "Restaurants", image: "/basket1.png", price: 1800, deliveryTime: 30, outOfStock: false },
+  { id: "6", name: "Burger Deluxe", category: "Restaurants", image: "/basket1.png", price: 2200, deliveryTime: 20, outOfStock: false },
 ];
 
 export default function RestaurantPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("Restaurants");
-  const [priceFilter, setPriceFilter] = useState("");
+  const [activeTab, setActiveTab] = useState<"Food" | "Fresh Items" | "Restaurants">("Restaurants");
+  const [priceFilter, setPriceFilter] = useState<"Low to High" | "High to Low" | "">("");
+
+  // Filter and sort food items
+  const filteredItems = foodItems
+    .filter((item) => item.category === activeTab) // Filter by active tab
+    .filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase())) // Filter by search term
+    .sort((a, b) => {
+      if (priceFilter === "Low to High") return a.price - b.price;
+      if (priceFilter === "High to Low") return b.price - a.price;
+      return 0; // No sorting if no price filter
+    });
 
   return (
     <div>
@@ -29,7 +49,7 @@ export default function RestaurantPage() {
           <h2 className="text-lg font-bold text-[#006634]">Grab Up to 50% off on orders for fresh food items</h2>
           <Button className="mt-2 bg-[#006634] text-white">BUY NOW</Button>
         </div>
-        <img src="/chef.png" alt="Chef" className="h-24 w-auto " />
+        <img src="/chef.png" alt="Chef" className="h-24 w-auto" />
       </div>
 
       <main className="mx-auto mt-6 max-w-screen-xl px-4">
@@ -40,7 +60,7 @@ export default function RestaurantPage() {
                 <span
                   key={tab}
                   className={`cursor-pointer pb-2 whitespace-nowrap ${activeTab === tab ? "border-b-2 border-green-500 font-medium" : "text-gray-500"}`}
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => setActiveTab(tab as "Food" | "Fresh Items" | "Restaurants")}
                 >
                   {tab}
                 </span>
@@ -67,6 +87,7 @@ export default function RestaurantPage() {
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={() => setPriceFilter("Low to High")}>Low to High</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setPriceFilter("High to Low")}>High to Low</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setPriceFilter("")}>Reset</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               <Button variant="outline" size="icon">
@@ -79,7 +100,7 @@ export default function RestaurantPage() {
 
         <section className="py-8">
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {foodItems.filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase())).map((item) => (
+            {filteredItems.map((item) => (
               <FoodItemCard key={item.id} {...item} />
             ))}
           </div>
