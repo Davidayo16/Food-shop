@@ -79,7 +79,7 @@ export function SiteHeader() {
               </span>
             </Button>
           </Link>
-          <LoginSimulator />
+          {/* <LoginSimulator /> */}
         </div>
       </div>
     </header>
