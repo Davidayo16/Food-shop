@@ -35,7 +35,7 @@ export function SiteHeader() {
         <span className="text-[#FFFFFF]">+443574545</span>
         <div className="hidden md:flex items-center gap-4">
           <span className="text-[#FFFFFF]">Get 20% off selected food items</span>
-          <Link href="/shop" className="text-[#FFC859]">
+          <Link href="/restaurants" className="text-[#FFC859]">
             Shop Now
           </Link>
         </div>
